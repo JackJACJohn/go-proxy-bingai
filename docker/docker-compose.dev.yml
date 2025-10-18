@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+  go-proxy-bingai:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      # 如果需要包含前端，使用 Dockerfile.production
+      # dockerfile: docker/Dockerfile.production
+    image: go-proxy-bingai:dev
+    container_name: go-proxy-bingai-dev
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    
+    # 开发模式挂载本地代码
+    volumes:
+      # 挂载源代码用于热重载 (可选)
+      # - ../:/app:cached
+      # 如果仅需要挂载配置，可按需启用以下行
+      # - ./config:/app/config:ro
+    
+    environment:
+      # 开发模式配置
+      - Go_Proxy_BingAI_Debug=true
+      - LOG_LEVEL=DEBUG
+      - PORT=8080
+      
+      # 人机验证服务器地址 (可选)
+      - BYPASS_SERVER=https://bypass.zklcdc.xyz
+      
+      # Bing API 基础地址 (可选)
+      # - BING_BASE_URL=https://www.bing.com
+      # - SYDNEY_BASE_URL=https://sydney.bing.com
+      
+      # 代理设置 (可选，开发时可能需要)
+      # - HTTP_PROXY=http://host.docker.internal:7890
+      # - HTTPS_PROXY=http://host.docker.internal:7890
+      
+      # 用户令牌 (可选)
+      # - Go_Proxy_BingAI_USER_TOKEN_1=dev_token_1
+      
+      # 用户 Cookie (可选)
+      # - USER_KievRPSSecAuth=xxx
+      # - USER_RwBf=xxx
+      # - USER_MUID=xxx
+      
+      # API 密钥 (可选)
+      # - Go_Proxy_BingAI_AUTH_KEY=dev-key-123
+    
+    # 健康检查
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8080/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    
+    # 网络配置
+    networks:
+      - bingai-dev-network
+    
+    # 允许访问宿主机服务
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+networks:
+  bingai-dev-network:
+    driver: bridge

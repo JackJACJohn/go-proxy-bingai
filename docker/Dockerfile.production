@@ -1,21 +1,41 @@
-FROM golang:1.21-alpine AS builder
+# Stage 1: Build frontend
+FROM node:18-alpine AS frontend-builder
+
+WORKDIR /frontend
+
+# Copy frontend source
+COPY frontend/ ./
+
+# Install pnpm and dependencies
+RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN pnpm install
+
+# Build frontend
+RUN pnpm build
+
+# Stage 2: Build Go backend
+FROM golang:1.21-alpine AS backend-builder
 
 WORKDIR /app
 
 # Install build dependencies
-RUN apk add --no-cache git ca-certificates
+RUN apk add --no-cache ca-certificates tzdata
 
-# Copy go mod files and download dependencies
+# Copy go mod files
 COPY go.mod go.sum ./
 RUN go mod download
 
 # Copy source code
 COPY . .
 
+# Copy built frontend from previous stage
+COPY --from=frontend-builder /frontend/dist ./web/
+
 # Build Go binary with optimizations
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
     go build -ldflags="-s -w" -tags netgo -trimpath -o go-proxy-bingai main.go
 
+# Stage 3: Final minimal image
 FROM alpine:latest
 
 LABEL maintainer="go-proxy-bingai"
@@ -29,7 +49,7 @@ RUN apk add --no-cache ca-certificates tzdata && \
 WORKDIR /app
 
 # Copy binary from builder
-COPY --from=builder /app/go-proxy-bingai .
+COPY --from=backend-builder /app/go-proxy-bingai .
 
 # Change ownership
 RUN chown -R bingai:bingai /app
@@ -41,10 +61,12 @@ USER bingai
 ENV PORT=8080 \
     LOG_LEVEL=INFO
 
+# Expose port
 EXPOSE 8080
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD wget -q --spider http://localhost:${PORT}/ || exit 1
 
+# Run the binary
 CMD ["/app/go-proxy-bingai"]

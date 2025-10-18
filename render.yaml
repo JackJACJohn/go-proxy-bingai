@@ -1,8 +1,22 @@
 services:
   - type: web
     name: go-proxy-bingai
-    # oregon: frankfurt
+    runtime: go
     plan: free
-    env: go
+    region: oregon
     buildCommand: go build -ldflags="-s -w" -tags netgo -trimpath -o go-proxy-bingai main.go
     startCommand: ./go-proxy-bingai
+    healthCheckPath: /
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: LOG_LEVEL
+        value: INFO
+      - key: BYPASS_SERVER
+        value: https://bypass.zklcdc.xyz
+      - key: APIKEY
+        generateValue: true
+      - key: Go_Proxy_BingAI_USER_TOKEN
+        sync: false
+      - key: USER_KievRPSSecAuth
+        sync: false

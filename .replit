@@ -1,0 +1,35 @@
+# Replit 配置文件
+
+run = "bash replit-start.sh"
+entrypoint = "main.go"
+hidden = [".config", ".git", ".gitignore"]
+
+[nix]
+channel = "stable-23_05"
+
+[deployment]
+run = ["bash", "replit-start.sh"]
+deploymentTarget = "cloudrun"
+ignorePorts = false
+
+[languages.go]
+pattern = "**/*.go"
+
+[languages.go.languageServer]
+start = "gopls"
+
+[[ports]]
+localPort = 8080
+externalPort = 80
+
+[env]
+PORT = "8080"
+LOG_LEVEL = "INFO"
+BYPASS_SERVER = "https://bypass.zklcdc.xyz"
+
+[gitHubImport]
+requiredFiles = [".replit", "replit-start.sh"]
+
+[[hints]]
+regex = "Error: .* GOPATH"
+message = "Go dependencies need to be installed. Run 'go get' to fetch them."

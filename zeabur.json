@@ -1,0 +1,35 @@
+{
+  "$schema": "https://zeabur.com/schemas/zeabur.json",
+  "name": "go-proxy-bingai",
+  "services": [
+    {
+      "name": "go-proxy-bingai",
+      "type": "web",
+      "dockerfile": "./docker/Dockerfile",
+      "ports": [
+        {
+          "type": "HTTP",
+          "containerPort": 8080
+        }
+      ],
+      "env": {
+        "PORT": "8080",
+        "LOG_LEVEL": "INFO",
+        "BYPASS_SERVER": "https://bypass.zklcdc.xyz"
+      },
+      "resources": {
+        "cpu": 0.5,
+        "memory": 512
+      },
+      "healthCheck": {
+        "type": "http",
+        "path": "/",
+        "interval": 30,
+        "timeout": 10,
+        "retries": 3
+      }
+    }
+  ],
+  "volumes": [],
+  "regions": ["us-west1", "ap-east1"]
+}

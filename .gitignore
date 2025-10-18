@@ -15,3 +15,25 @@ release
 node_modules
 /_worker.js
 /worker.js
+
+# Docker
+docker/.env
+docker/logs/
+*.log
+
+# Build artifacts
+dist/
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Deno
+deno.lock
+.deno/
+
+# Platform specific
+.vercel
+.replit_env
+package-lock.json
+frontend/package-lock.json

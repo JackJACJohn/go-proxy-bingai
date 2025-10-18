@@ -1,0 +1,43 @@
+# Git
+.git
+.github
+.gitignore
+
+# Editor / IDE artifacts
+.vscode
+.idea
+.codesandbox
+.devcontainer
+
+# Build artifacts
+release
+dist
+node_modules
+frontend/node_modules
+frontend/dist
+
+# Logs
+*.log
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Go build cache
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Task and deployment configs not needed for build context
+render.yaml
+vercel.json
+wrangler.toml
+Taskfile.yaml
+
+# Workers
+/_worker.js
+/worker.js

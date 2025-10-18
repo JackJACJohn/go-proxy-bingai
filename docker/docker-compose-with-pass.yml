@@ -1,22 +1,78 @@
-version: '3'
+version: '3.8'
 
 services:
   go-proxy-bingai:
-    image: zklcdc/go-proxy-bingai:latest-with-pass
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile-with-pass
+    image: go-proxy-bingai:with-pass
     container_name: go-proxy-bingai-with-pass
-    restart: always
+    restart: unless-stopped
     ports:
-      - 8080:8080
-      - 45678:45678
+      - "8080:8080"     # BingAI 代理服务
+      - "45678:45678"   # 人机验证服务
+    
     environment:
+      # ===== 必须配置 =====
+      # Cloudflare Zero Trust Token (用于 cloudflared 隧道)
+      - CF_ZERO_TRUST_TOKEN=${CF_ZERO_TRUST_TOKEN}
+      
+      # API 密钥 (用于内部人机验证服务，请修改为强密码)
+      - APIKEY=${APIKEY:-sk-change-this-key}
+      
+      # ===== Bing API 基础地址 (可选) =====
       # - BING_BASE_URL=https://www.bing.com
       # - SYDNEY_BASE_URL=https://sydney.bing.com
+      
+      # ===== 代理设置 (可选) =====
       # - HTTP_PROXY=http://172.17.0.1:18080
       # - HTTPS_PROXY=http://172.17.0.1:18080
-      # - Go_Proxy_BingAI_USER_TOKEN_1=xxx
-      # - Go_Proxy_BingAI_USER_TOKEN_2=xxx
-      # - USER_KievRPSSecAuth=xxx
-      # - USER_RwBf=xxx
-      # - USER_MUID=xxx
-      - APIKEY=sk-xxx
-      - CF_ZERO_TRUST_TOKEN=CF_ZERO_TRUST_TOKEN
+      
+      # ===== 用户令牌 (可选，用于多用户) =====
+      # - Go_Proxy_BingAI_USER_TOKEN_1=your_token_1
+      # - Go_Proxy_BingAI_USER_TOKEN_2=your_token_2
+      
+      # ===== 用户 Cookie (可选，用于保持登录状态) =====
+      # - USER_KievRPSSecAuth=your_kiev_cookie
+      # - USER_RwBf=your_rwbf_cookie
+      # - USER_MUID=your_muid_cookie
+      
+      # ===== API 访问控制 (可选) =====
+      # - Go_Proxy_BingAI_AUTH_KEY=sk-xxx,sk-yyy
+      
+      # ===== 日志级别 (可选: DEBUG, INFO, WARN, ERROR) =====
+      - LOG_LEVEL=INFO
+      
+      # ===== 端口设置 =====
+      - PORT=8080
+      - BYPASS_SERVER=http://localhost:45678
+    
+    # 健康检查
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8080/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    
+    # 资源限制 (可选)
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '2'
+    #       memory: 1G
+    #     reservations:
+    #       cpus: '1'
+    #       memory: 512M
+    
+    # 网络配置
+    networks:
+      - bingai-network
+    
+    # 持久化日志 (可选)
+    # volumes:
+    #   - ./logs:/var/log/supervisor
+
+networks:
+  bingai-network:
+    driver: bridge

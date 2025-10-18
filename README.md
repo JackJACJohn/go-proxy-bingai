@@ -39,6 +39,10 @@
 > #### CodeSandbox 部署
 >
 > [![Edit BingAI](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/p/devbox/github/Harry-zklcdc/go-proxy-bingai/tree/master?import=true)
+>
+> #### Docker 部署
+>
+> [Docker 部署指南](./docker/README.md)
 
 ### BingAI 本体
 

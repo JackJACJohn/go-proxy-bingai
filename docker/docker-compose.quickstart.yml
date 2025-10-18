@@ -1,0 +1,28 @@
+version: '3.8'
+
+# 快速启动配置 - 最简化的配置，适合快速测试
+# 使用方法: docker-compose -f docker-compose.quickstart.yml up -d
+
+services:
+  go-proxy-bingai:
+    image: zklcdc/go-proxy-bingai:latest
+    container_name: go-proxy-bingai-quickstart
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      # 使用公共人机验证服务器（可选）
+      - BYPASS_SERVER=https://bypass.zklcdc.xyz
+      - LOG_LEVEL=INFO
+      - PORT=8080
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8080/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+
+# 注意：
+# 1. 如需本地构建镜像，修改 image 为 build 配置
+# 2. 如需更多配置选项，请参考 docker-compose.yml
+# 3. 如需人机验证服务，请使用 docker-compose-with-pass.yml

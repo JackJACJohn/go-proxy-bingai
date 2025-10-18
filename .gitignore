@@ -27,3 +27,13 @@ dist/
 *.dll
 *.so
 *.dylib
+
+# Deno
+deno.lock
+.deno/
+
+# Platform specific
+.vercel
+.replit_env
+package-lock.json
+frontend/package-lock.json

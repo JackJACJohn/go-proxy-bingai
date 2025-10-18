@@ -1,0 +1,20 @@
+{
+  "name": "go-proxy-bingai",
+  "version": "1.0.0",
+  "description": "Go Proxy BingAI - OpenAI compatible API for Bing Chat",
+  "tasks": {
+    "dev": "deno run --allow-net --allow-read --allow-env server.ts",
+    "start": "deno run --allow-net --allow-read --allow-env server.ts"
+  },
+  "imports": {
+    "@std/": "https://deno.land/std@0.208.0/"
+  },
+  "compilerOptions": {
+    "lib": ["deno.window", "deno.unstable"],
+    "strict": true
+  },
+  "deploy": {
+    "project": "go-proxy-bingai",
+    "entrypoint": "./server.ts"
+  }
+}

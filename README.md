@@ -34,21 +34,31 @@
 
 ## 🚀 一键部署
 
+> 📖 **[完整部署指南](./DEPLOY.md)** - 查看所有平台的详细部署教程
+
 ### BingAI + 人机验证服务器
+
+> #### Docker 部署（推荐）
+>
+> [Docker 部署指南](./docker/README.md) | [中文指南](./docker/DOCKER_CN.md)
+>
+> ```bash
+> cd docker && docker compose up -d
+> ```
 
 > #### CodeSandbox 部署
 >
 > [![Edit BingAI](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/p/devbox/github/Harry-zklcdc/go-proxy-bingai/tree/master?import=true)
->
-> #### Docker 部署
->
-> [Docker 部署指南](./docker/README.md)
 
 ### BingAI 本体
 
-> #### Cloudflare Worker 部署
+> #### Cloudflare Workers 部署（推荐）
 >
 > [![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/Harry-zklcdc/go-proxy-bingai)
+
+> #### Cloudflare Pages 部署
+>
+> 从 [Cloudflare Dashboard](https://dash.cloudflare.com/) 连接 GitHub 仓库部署
 
 > #### Vercel 部署
 >
@@ -58,13 +68,21 @@
 >
 > [![Deploy on Zeabur](https://zeabur.com/button.svg)](https://zeabur.com/templates/ZBA4SF)
 
+> #### Deno Deploy 部署
+>
+> 从 [Deno Deploy](https://deno.com/deploy) 连接 GitHub 仓库，入口: `server.ts`
+
 > #### Glitch 部署
 >
-> [![Remix on Glitch](https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button.svg)](https://glitch.com/edit/#!/import/github/Harry-zklcdc/go-proxy-bingai-glitch)
+> [![Remix on Glitch](https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button.svg)](https://glitch.com/edit/#!/import/github/Harry-zklcdc/go-proxy-bingai)
 
 > #### Replit 部署
 >
 > [![Run on Repl.it](https://img.shields.io/badge/Run_on_Repl.it-grey?logo=replit&size=large)](https://repl.it/github/Harry-zklcdc/go-proxy-bingai)
+
+> #### Render 部署
+>
+> 从 [Render Dashboard](https://dashboard.render.com/) 连接 GitHub 仓库部署
 
 ### 人机验证服务器
 
